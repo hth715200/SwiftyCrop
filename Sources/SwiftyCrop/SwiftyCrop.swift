@@ -9,23 +9,27 @@ import SwiftUI
 ///   - maskShape: The shape of the mask used for cropping.
 ///   - configuration: The configuration for the cropping behavior. If nothing is specified, the default is used.
 ///   - onComplete: A closure that's called when the cropping is complete. This closure returns the cropped `UIImage?`.
+///   - onCancel: A closure that's called when the cropping is cancel.
 ///     If an error occurs the return value is nil.
 public struct SwiftyCropView: View {
     private let imageToCrop: UIImage
     private let maskShape: MaskShape
     private let configuration: SwiftyCropConfiguration
     private let onComplete: (UIImage?) -> Void
+    private let onCancel: () -> Void
 
     public init(
         imageToCrop: UIImage,
         maskShape: MaskShape,
         configuration: SwiftyCropConfiguration = SwiftyCropConfiguration(),
-        onComplete: @escaping (UIImage?) -> Void
+        onComplete: @escaping (UIImage?) -> Void,
+        onCancel: @escaping () -> Void
     ) {
         self.imageToCrop = imageToCrop
         self.maskShape = maskShape
         self.configuration = configuration
         self.onComplete = onComplete
+        self.onCancel = onCancel
     }
 
     public var body: some View {
@@ -33,7 +37,8 @@ public struct SwiftyCropView: View {
             image: imageToCrop,
             maskShape: maskShape,
             configuration: configuration,
-            onComplete: onComplete
+            onComplete: onComplete,
+            onCancel: onCancel
         )
     }
 }

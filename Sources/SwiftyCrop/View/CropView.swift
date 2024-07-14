@@ -8,18 +8,21 @@ struct CropView: View {
     private let maskShape: MaskShape
     private let configuration: SwiftyCropConfiguration
     private let onComplete: (UIImage?) -> Void
+    private let onCancel: () -> Void
     private let localizableTableName: String
 
     init(
         image: UIImage,
         maskShape: MaskShape,
         configuration: SwiftyCropConfiguration,
-        onComplete: @escaping (UIImage?) -> Void
+        onComplete: @escaping (UIImage?) -> Void,
+        onCancel: @escaping () -> Void
     ) {
         self.image = image
         self.maskShape = maskShape
         self.configuration = configuration
         self.onComplete = onComplete
+        self.onCancel = onCancel
         _viewModel = StateObject(
             wrappedValue: CropViewModel(
                 maskRadius: configuration.maskRadius,
@@ -115,6 +118,7 @@ struct CropView: View {
 
             HStack {
                 Button {
+                    onCancel()
                     dismiss()
                 } label: {
                     Text("cancel_button", tableName: localizableTableName, bundle: .module)
